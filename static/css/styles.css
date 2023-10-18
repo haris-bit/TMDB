@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+    font-family: 'Poppins', sans-serif;
+
+}
+.theme-bg-color{
+  background-color: #8fd306;
+}
+
+.theme-text-color{
+  color: #8fd306;
+}
+
+.img-wrapper {
+  position: relative;
+}
+
+.thumbnail-info {
+  background: #000; /* Black background */
+  color: #fff; /* White text */
+  padding: 10px;
+}
+
+
+.thumbnail-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.9); /* Black background with transparency */
+  color: #fff; /* White text */
+  padding: 6px;
+}
+.card-inner {
+  padding: 10px; /* Adjust as needed */
+}
+
+.col-sm-4.my-card {
+  margin: 10px; /* Adjust as needed */
+}
+
+.containerr{
+    height: 100% !important;
+    width: 100% !important;
+    padding: 50px;
+}
+body {
+    background-color: #000 !important;
+}
+
+
+
+.header {
+    padding-top: 30px;
+    color: lawngreen;
+}
+
+.title {
+    color: #fff;
+}
+.subtitle{
+    color:#fff;
+    font-size: 24px;
+}
+
+.search-bar {
+    margin: 30px 0;
+
+}
+
+.search-bar input {
+    border-radius: 10px;
+    border: none;
+    padding: 8px;
+    width: 100%;
+    color: #000 !important;
+}
+input::placeholder{
+    color: #000;
+}
+.cards {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.movie-card p{
+    color: lawngreen;
+}
+.thumbnail{
+    color:lawngreen;
+
+}
+
+.movie-card img {
+  max-width: 200%; /* instead of fixed width */
+  height: 100%; /* so the aspect ratio remains consistent */
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+}
+.rating {
+    color:lawngreen;
+    font-size: 0.8em; /* adjust as needed */
+}
+
+.rating-overlay {
+  position: absolute;
+  bottom: -10;
+  width: 95%;
+  background: rgba(255, 0, 0, 0.6); /* red background with 60% opacity */
+  color: white; /* white text */
+  padding: 0px;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.movie-card .card-body {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  transition: opacity 0.3s ease;
+}
+
+.movie-card {
+  position: relative; /* needed to position the rating overlay correctly */
+  padding: 0px;
+  cursor: pointer;
+  margin-right: 0px; /* Adds a 10px margin on all sides of the card */
+
+}
+
+
+
+
+.movie-card:hover .card-body {
+    transform: scale(1.02);
+    transition: transform 0.3s ease;
+    opacity: 1;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+}
+
+.button a {
+    text-decoration: none;
+}
+
+.button a:hover {
+    color: #000;
+}
+.next-btn {
+    background-color: lawngreen;
+    border: 1px solid black;
+    box-shadow: 4px 3px 3px 3px #000;
+    color: black;
+    font-weight: 900;
+    font-size: 20px;
+    width: 250px;
+    height: 45px;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    text-align: center;
+    padding-top: 0.4%;
+    text-decoration: none;
+}
+
+.progress {
+    margin-top: 25px;
+    margin-bottom: 35px;
+}
+
+h4 {
+    margin-left: 10px;
+}
+
+.my-carousel {
+    margin: 50px 0;
+}
+
+
+
+@media only screen and (max-width: 1400px) {
+    .cards {
+        justify-content: space-evenly;
+    }
+}

@@ -1,0 +1,11 @@
+pandas
+scikit-learn
+gunicorn
+flask
+flask_sqlalchemy
+flask_login
+pyOpenSSL
+requests
+oauthlib
+requests
+requests-oauthlib

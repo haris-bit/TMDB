@@ -1,0 +1,173 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.theme-bg-color{
+  background-color: #8fd306;
+}
+
+.theme-text-color{
+  color: #8fd306;
+}
+
+body {
+    background-color: #000 !important;
+}
+
+.containerr{
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.header{
+    height: 20%;
+    text-align: start;
+    padding: 30px 0px 0px 30px;
+    margin-bottom: 50px;
+    color: #e6b400;
+}
+.logo{
+    font-size: 20px;
+}
+.title{
+    width: 75% !important;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #fff;
+}
+.title h1{
+    font-size: 45px !important;
+}
+
+.subtitle{
+    color: #fff;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.subtitle p{
+    /* font-style: italic; */
+    font-size: 35px;
+    font-weight: 300;
+
+}
+.progress {
+    width: 90%;
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 35px;
+}
+.signUpForm{
+    width: 50%;
+    margin: auto;
+}
+.form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+
+}
+.input-box {
+    margin-bottom: 20px;
+    width: 45%;
+    height: 50px;
+    padding: 5px;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+.input-box::placeholder{
+    color: #000;
+}
+.submit-btn{
+    background-color: #D1FFBD;
+    padding: 0;
+    border: 1px solid black;
+    box-shadow: 4px 3px 3px 3px #000;
+    color: black;
+    width: 45%;
+    height: 50px;
+}
+hr{
+    margin-top: 50px !important;
+}
+.login{
+    margin-top: 20px !important;
+    width: 45%;
+    padding-top: 1%;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 5px;
+    color: #000;
+    height: 50px;
+    background-color: #e6b400;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+.login p{
+    margin-bottom: 0px;
+}
+.login i{
+    margin-right: 10px;
+}
+hr{
+    margin-top: -5px !important;
+    color: #fff !important;
+}
+.button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.button a {
+    text-decoration: none;
+}
+
+.button a:hover {
+    color: #000;
+}
+
+.next-btn {
+    background-color: #e6b400;
+    border: 1px solid black;
+    box-shadow: 4px 3px 3px 3px #000;
+    color: black;
+    font-weight: 900;
+    font-size: 20px;
+    width: 45%;
+    height: 50px;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    text-align: center;
+    padding-top: 1%;
+    text-decoration: none;
+}
+
+
+@media only screen and (max-width:1000px){
+
+    .input-box{
+        width: 100%;
+    }
+    .login p{
+        margin-bottom:0px ;
+    }
+    .login{
+        padding:2%;
+        width: 100%;
+    }
+    .submit-btn{
+        width: 100%;
+    }
+    .next-btn{
+        padding-top:2%;
+        width: 100%;
+    }
+}

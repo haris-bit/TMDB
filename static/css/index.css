@@ -1,0 +1,152 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #000;
+}
+
+.theme-bg-color{
+  background-color: #8fd306;
+}
+
+.theme-text-color{
+  color: #8fd306;
+}
+
+
+.containerr{
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.header{
+    height: 20%;
+    text-align: start;
+    padding: 30px 0px 0px 30px;
+    margin-bottom: 50px;
+}
+.logo{
+    font-size: 20px;
+    color: #e6b400;
+}
+.title{
+    width: 75% !important;
+    margin: auto;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #fff;
+}
+.title h1{
+    font-size: 45px !important;
+}
+
+.subtitle{
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff;
+}
+.subtitle p{
+    font-style: italic;
+    font-size: 35px;
+    font-weight: 200;
+
+}
+.progress {
+    width: 90%;
+
+    margin: auto;
+    margin-top: 25px;
+    margin-bottom: 35px;
+}
+.bottomContainer{
+    width: 100%;
+    margin: auto;
+    /* padding-left: 140px; */
+}
+.options{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.suboptions{
+    float: left;
+    width: 400px;
+    margin-bottom:20px;
+    height: auto;
+    margin-left:20px;
+    border-radius: 5px;
+    /* box-shadow: 4px 3px 3px 3px #000; */
+    background-color: #fff;
+    text-align: center;
+    padding:auto;
+    padding-top:1%;
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+}
+.suboptions p {
+    background-color: #fff;
+    color: #333333;
+}
+/*
+.buttons{
+    width:60%;
+    padding: 23px;
+    content: "";
+    display: flex;
+    clear: both;
+    margin: auto;
+    margin-top: 30px;
+    justify-content: center;
+}
+.next-btn{
+
+    background-color: #D1FFBD;
+    padding: 0;
+    border: 1px solid black;
+    box-shadow: 4px 3px 3px 3px #000;
+    color: black;
+    float: right;
+    width: 250px;
+    height: 60px;
+} */
+
+.button {
+    display: flex;
+    justify-content: center;
+}
+
+.button a {
+    text-decoration: none;
+}
+
+.button a:hover {
+    color: #000;
+}
+
+.next-btn {
+    background-color: #e6b400;
+    border: 1px solid black;
+    box-shadow: 4px 3px 3px 3px #000;
+    color: black;
+    font-weight: 900;
+    font-size: 20px;
+    width: 250px;
+    height: 45px;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 25px;
+    text-align: center;
+    padding-top: 0.4%;
+    text-decoration: none;
+}
+@media only screen and (max-width:600px){
+
+    .suboptions{
+        width: 300px;
+    }
+
+
+}

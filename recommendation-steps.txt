@@ -1,0 +1,19 @@
+Old recommendation way:
+
+Actually The recommendation is done with the following steps :
+
+- Take the actors best movie in the Db and look the movie in TMDB API and give similar movie to this movie.
+- Take the Directors best movie in the Db and look the movie in TMDB API and give similar movie to this movie.
+- Take the films the user selected and look the movie in TMDB API and give similar movie to all movies.
+- Then apply a filter for the movie length, then apply a filter for Freshness, then apply a filter for genre and display 10 best results
+
+
+New recommendation way:
+Now I want to make it work differently :
+
+- For each actor take 3-4 random movies they have done and get similar movies using the API.
+- For each Director, take 3-4 random movies and get similar movies using API
+- Then make a list with all actors and directors similar movies
+- For each movies the user select takes similar movies.
+- Then cross the list from actors and directors and user selected similar movies and take the common movies in the list.
+- Then apply a filter for the movie length, then apply a filter for Freshness, then apply a filter for genre and display 10 best results

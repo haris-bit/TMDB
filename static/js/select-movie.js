@@ -27,10 +27,6 @@ function onSort(sortBy) {
 
 async function loadgenres() {
 
-  //localStorage.removeItem("recommendations");
-  //localStorage.removeItem("genreid")
-  //localStorage.removeItem("actorid")
-  //localStorage.removeItem("directorid")
   const options = {
     method: 'GET',
     headers: {
@@ -52,11 +48,8 @@ let currentSelected = null;
 window.selectgenre = function (id) {
   let node = document.getElementById(id);
   let genreBlock = node.parentNode;
-
-  // Create a div for overlay
-// Create a div for overlay
-let overlay = document.createElement('div');
-overlay.style = `
+  let overlay = document.createElement('div');
+  overlay.style = `
   position: absolute;
   top: 0;
   left: 0;
@@ -151,12 +144,6 @@ function showgenere(response) {
       </div>
     </div>`;
 
-
-    /*html += `
-    <div style="cursor:pointer;" class="card col-md-2 text-center m-2 p-0 bg-warning" id="genre-${index}" onclick="selectgenre(${genre.id})">
-      <p class="fw-medium bg-warning" id=${genre.id}>${genre.name}</p>
-    </div>
-`*/
   })
 
   genreContainer.innerHTML = html;
@@ -164,7 +151,6 @@ function showgenere(response) {
 
 
 function loadmovies() {
-  //var url = 'https://api.themoviedb.org/3/trending/movie/day?language=en-US';
 
   var actorid = JSON.parse(localStorage.getItem("actorid"))
   var directorid = JSON.parse(localStorage.getItem("directorid"))
@@ -202,7 +188,7 @@ function loadmovies() {
     }
   }
   let genrefilter = generelist.join("|");
-  let genereslist = '&&with_genres='+currentSelected+"&&";
+  let genereslist = '&&with_genres=' + currentSelected + "&&";
 
 
 
@@ -246,14 +232,6 @@ function loadmovies() {
     if (globalQuery != '') {
       url = `https://api.themoviedb.org/3/search/movie?query=${globalQuery}&&page=${page}`;
     }
-    /*if (page % 2 == 0) {
-      url = `https://api.themoviedb.org/3/discover/movie?${length_str}with_genres=${genreid.join("|")}&&with_people=${peopleid.join("|")}&&page=${page}&&language=en-US&&sort_by=${sort_by}`;
-    } else {
-      url = `https://api.themoviedb.org/3/movie/popular?page=${page}`;
-    }*/
-
-
-
 
     let response = await fetch(url, options);
     let responseData = await response.json();
@@ -265,40 +243,7 @@ function loadmovies() {
 
     totalPage = responseData.total_pages;
 
-    /*actorResults = actorResults.filter(actor => {
-      // Check if at least one of the actor's genre_ids is included in genreIds
-      return actor.genre_ids.some(genreId => genreid.includes(genreId));
-    });
-
-
-
-
-    // where each object has an id property that uniquely identifies the actor
-    let uniqueActorIds = new Set(movies.map(actor => actor.id));
-
-
-
-    actorResults = actorResults.filter(actor => {
-      if (!uniqueActorIds.has(actor.id)) {
-        uniqueActorIds.add(actor.id);
-        return true;
-      }
-      return false;
-    });
-
-    actorResults = actorResults.filter(actor => {
-      console.log('FILTER NAME', actor)
-      if (actor.title.toLowerCase().includes(globalQuery.toLowerCase())) {
-        uniqueActorIds.add(actor.id);
-        return true;
-      }
-      return false;
-    });*/
-
     movies = [...movies, ...actorResults,]
-
-    //sortAndShowMovies();
-
 
     showmovies();
     //showmovies({ results: actorResults });
@@ -382,28 +327,6 @@ function showmovies(response) {
 
   console.log(sort_by)
 
-
-
-  /*movies = movies.filter((movie) => {
-    var currentYear = new Date().getFullYear();
-    var year = '';
-
-    if (movie.release_date != null) {
-      year = movie.release_date.split('-')[0];
-
-      // Parse year to integer and check if it's less than or equal to the current year.
-      // If it is, keep the movie in the filtered list.
-      if (parseInt(year) <= currentYear) {
-        return true;
-      }
-    }
-
-    // If the movie has no release date or if the release year is greater than the current year, exclude it.
-    return false;
-  });*/
-
-
-
   movies = movies.filter(movie => movie.poster_path !== null);
   movies.map(movie => {
     var url = 'http://127.0.0.1:8080/static/images/movie_poster.jpg';
@@ -426,7 +349,7 @@ function showmovies(response) {
 
     console.log(movie, year)
 
-//${movie.title}
+    //${movie.title}
     var movieHtml = `
     <div class="card movie-card m-1 h-100">
     <a id="${movie.id}" onclick="selectmovie(${movie.id})">
@@ -452,25 +375,7 @@ function showmovies(response) {
   referameSelection();
 
 }
-/*
- <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 col-xxl-2 mb-2">
-    <div class="card movie-card h-100" style="background-color: #000">
-        <a id="${movie.id}" onclick="selectmovie(${movie.id})">
-            <img src="${url}" alt="${movie.title}" class="card-img-top img-fluid">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-12 col-12">
-                        <p class="fw-bolder text-wrap text-warning">${movie.title}: ${year}</p>
-                    </div>
-                    <div class="col-md-12 col-12 text-md-start text-start">
-                        <p class="fw-bolder text-warning">Rating: ${movie.vote_average}</p>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-</div>
-*/
+
 
 // create observer
 const sentinel = document.querySelector('#sentinel');
@@ -521,6 +426,7 @@ function selectmovie(id) {
     imgnode.style.border = "5px solid #adf90f";
     //movies.push({ 'name': imgname, 'id': id });
     moviesids.push(id)
+    console.log(moviesids)
   } else {
     imgnode.style.border = "none";
     //movies = movies.filter(item => item !== imgname);
@@ -533,14 +439,73 @@ function selectmovie(id) {
 
 }
 
-function setmovies() {
-  if (moviesids.length == 0) {
-    alert("Please select at least 5 movies.");
+async function setmovies() {
+
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1N2ZjYmJiZjI3YzQxNTk3MDQxZGZhMTU3YjRlN2Q3ZCIsInN1YiI6IjY0ODEzYmVkNjQ3NjU0MDEwNWJmZWUzMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WWPU5zM9ef2R8M7qHLVXRaGjosEzNU0ev3ZwEEN9f2U'
+    }
+  };
+
+  let list2 = [];
+
+  const apiKey = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1N2ZjYmJiZjI3YzQxNTk3MDQxZGZhMTU3YjRlN2Q3ZCIsInN1YiI6IjY0ODEzYmVkNjQ3NjU0MDEwNWJmZWUzMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WWPU5zM9ef2R8M7qHLVXRaGjosEzNU0ev3ZwEEN9f2U';
+
+  if (moviesids.length < 3) {
+    alert("Please select at least 3 movies.");
+    return;
+  }
+
+  // Function to get movie recommendations
+  async function getRecommendations(movieId) {
+    let url = `https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${apiKey}&language=en-US&page=1`;
+    let response = await fetch(url, options);
+    let data = await response.json();
+    return data.results;
+  }
+
+  // Iterate over each selected movie
+  for (let movieId of moviesids) {
+    console.log(`Fetching first-level recommendations for movie ID: ${movieId}`);
+
+    let firstRecommendations = await getRecommendations(movieId);
+    console.log(`First-level recommendations for movie ID ${movieId}:`, firstRecommendations);
+
+    list2.push(...firstRecommendations);
+
+    // For each recommendation, fetch more recommendations
+    for (let recommendation of firstRecommendations) {
+      console.log(`Fetching second-level recommendations for movie ID: ${recommendation.id}`);
+
+      let secondRecommendations = await getRecommendations(recommendation.id);
+      console.log(`Second-level recommendations for movie ID ${recommendation.id}:`, secondRecommendations);
+
+      list2.push(...secondRecommendations);
+    }
+  }
+
+  console.log("Total recommendations collected:", list2.length);
+  console.log("All recommendations:", list2);
+
+  // At this point, list2 will contain all the recommendations you wanted
+  if (list2.length < 60) {
+    alert("Not enough recommendations. Please select different movies.");
   } else {
-    localStorage.setItem("movies", JSON.stringify(moviesids));
+    localStorage.setItem('movieRecommendations', JSON.stringify(list2));
     window.location.href = "/select-recentness";
-
-
   }
 }
+
+
+
 loadgenres()
+
+
+
+
+
+
+
+

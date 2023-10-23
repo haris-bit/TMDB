@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
   let currentIndex = 0;
   let itemsPerPage = 50;
 
+  let list1 = []
+
 
 
   const options = {
@@ -58,96 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-  async function getMoviesId() {
-    var storedMovies = localStorage.getItem("movies");
-
-    var movies = JSON.parse(storedMovies);
-
-    if (document.querySelectorAll('[data-movie-rid]') != null) {
-      console.log("No movies found in local storage");
-      var movieElements = document.querySelectorAll('[data-movie-rid]');
-
-
-      console.log(movieElements)
-
-      movies = [];
-
-      for (var i = 0; i < movieElements.length; i++) {
-        var movieId = movieElements[i].dataset.movieRid;
-
-        movies.push(movieId)
-
-        console.log(movieId)
-      }
-
-
-      if (movies.length == 0) {
-
-        movies = JSON.parse(storedMovies);
-        console.log(movies)
-        if (movies.length == 0) {
-          return movies;
-        }
-
-      }
-    }
-
-    //Get top rated movies for the actors and directors
-    var topRatedMoviesID = await getTopRatedMovies();
-
-    movies = movies.concat(topRatedMoviesID);
-
-
-    return movies;
-
-  }
-
-
-  async function getTopRatedMovies() {
-    var actorid = JSON.parse(localStorage.getItem("actorid"))
-    if (actorid == null) {
-      actorid = [];
-    }
-    var directorid = JSON.parse(localStorage.getItem("directorid"))
-    if (directorid == null) {
-      directorid = [];
-    }
-    actorid.concat(directorid)
-    let topRatedMovies = [];
-
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1N2ZjYmJiZjI3YzQxNTk3MDQxZGZhMTU3YjRlN2Q3ZCIsInN1YiI6IjY0ODEzYmVkNjQ3NjU0MDEwNWJmZWUzMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WWPU5zM9ef2R8M7qHLVXRaGjosEzNU0ev3ZwEEN9f2U'
-      }
-    };
-
-    console.log("TOP RATED MOVIES");
-    for (let i = 0; i < actorid.length; i++) {
-
-      url = `https://api.themoviedb.org/3/discover/movie?with_people=${actorid[i]}&&page=1&&language=en-US&&sort_by=vote_average.desc`;
-
-      let response = await fetch(url, options);
-      let responseData = await response.json();
-
-      console.log('TOP RATED MOVIES')
-
-      //actor results
-      let actorResults = responseData.results;
-
-      console.log(actorResults);
-
-      if (actorResults.length != 0) {
-        topRatedMovies.push(actorResults[0].id);
-      }
-    }
-
-    return topRatedMovies;
-  }
-
-
-
+  // important
   async function getAllReccommendations(movieid) {
 
     var startPage = 1;
@@ -198,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
+  // important
   async function getTopMoviesActors() {
     var actorid = JSON.parse(localStorage.getItem("actorid"))
     console.log(
@@ -234,6 +148,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       if (actorResults.length != 0) {
         topRatedMovies.push(actorResults[0].id);
+        // here add the top rated movie to the list1
+        list1.push(actorResults[0].id);
       }
     }
 
@@ -241,6 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
+  // important
   async function getTopMoviesDirectors() {
     var actorid = [];
 
@@ -275,6 +192,8 @@ document.addEventListener('DOMContentLoaded', function () {
       console.log(actorResults);
 
       if (actorResults.length != 0) {
+        // here add the top rated movie to the list1
+        list1.push(actorResults[0].id);
         topRatedMovies.push(actorResults[0].id);
       }
     }
@@ -283,59 +202,48 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-
-  async function nowPlayingMovies() {
-    let givengenresids = JSON.parse(localStorage.getItem("genreid"));
-
-    var directorid = JSON.parse(localStorage.getItem("directorid"))
-
-    var actorid = JSON.parse(localStorage.getItem("actorid"))
-
-    console.log(actorid)
-
-    actorid = actorid.concat(directorid)
-
-    let actorslist = actorid.join('|'); // change from actorslist to actorid
-
-    console.log("SELECTED GENRE's ID");
-
-    console.log(givengenresids)
-    let genreid = '';
-    if (givengenresids != null) {
-      genreid = givengenresids.join("|")
-    }
-
-    //with_people=${actorslist}&&
-
-
-    var currentYear = new Date().getFullYear();
-
-
-    //url = `https://api.themoviedb.org/3/discover/movie?page=${page}&&vote_count.gte=500&&primary_release_date.lte=${currentYear}&&language=en-US&&sort_by=vote_average.desc`;
-
-    url = `https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&page=1&primary_release_date.gte=${currentYear}&primary_release_date.lte=${currentYear}&sort_by=vote_count.desc&with_genres=${genreid}&vote_average.gte=5`
-
+  // May be extra
+  let watch_providers = [];
+  async function get_movie_providers(id) {
     const options = {
       method: 'GET',
       headers: {
         accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1N2ZjYmJiZjI3YzQxNTk3MDQxZGZhMTU3YjRlN2Q3ZCIsInN1YiI6IjY0ODEzYmVkNjQ3NjU0MDEwNWJmZWUzMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WWPU5zM9ef2R8M7qHLVXRaGjosEzNU0ev3ZwEEN9f2U'
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ODljOWJlMTkxYWUwN2VlZjk0YTgwNmQ1N2E1YTExNiIsInN1YiI6IjY0Nzk1YmM1MGUyOWEyMDBiZjFkZjEyMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Myu-8IC9IvWsw9SMBdkGRmme1mgdzSWmbrasn7nWoFY'
       }
     };
 
-    //url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`;
 
-    let response = await fetch(url, options);
-    let responseData = await response.json();
+    try {
+      let response = await fetch(`https://api.themoviedb.org/3/movie/${id}/watch/providers`, options);
 
-    console.log('NOW PLAYING RATED MOVIES')
 
-    //actor results
+      let result = await response.json();
 
-    let movieResults = responseData.results;
+      let providers_result = result.results;
 
-    return movieResults;
+      let usproviders = providers_result['US']
+
+
+
+      console.log("PROVIDERS");
+      console.log(usproviders);
+
+
+      return usproviders;
+
+    } catch (error) {
+
+    }
+
+
+    return undefined;
+
+
   }
+  let watch_providers_mapping = {};
+
+
 
   async function getRangePlayingMovies(dateRanges) {
     let givengenresids = JSON.parse(localStorage.getItem("genreid"));
@@ -383,107 +291,90 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
 
-  function getRandom(arr, n) {
-    var result = new Array(n),
-      len = arr.length,
-      taken = new Array(len);
-    if (n > len) {
-      return arr;
-    }
+  async function getTopMoviesForPeople() {
+    var personid = JSON.parse(localStorage.getItem("actorid")) || [];
 
-    while (n--) {
-      var x = Math.floor(Math.random() * len);
-      let magic = arr[x in taken ? taken[x] : x];
+    var directorid = JSON.parse(localStorage.getItem("directorid")) || [];
+    personid = personid.concat(directorid);
 
-      if (magic.vote_avg == 0)
-        continue;
-
-      result[n] = arr[x in taken ? taken[x] : x];
-      taken[x] = --len in taken ? taken[len] : len;
-    }
-    return result;
-  }
-
-
-  function getNowPlayingFilter(arr, n) {
-    var result = new Array(n),
-      len = arr.length,
-      taken = new Array(len);
-    if (n > len) {
-      return arr;
-    }
-
-
-    return arr.slice(0, n);
-  }
-
-  let watch_providers = [];
-  async function get_movie_providers(id) {
+    let topRatedMovies = [];
     const options = {
       method: 'GET',
       headers: {
         accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1ODljOWJlMTkxYWUwN2VlZjk0YTgwNmQ1N2E1YTExNiIsInN1YiI6IjY0Nzk1YmM1MGUyOWEyMDBiZjFkZjEyMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Myu-8IC9IvWsw9SMBdkGRmme1mgdzSWmbrasn7nWoFY'
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1N2ZjYmJiZjI3YzQxNTk3MDQxZGZhMTU3YjRlN2Q3ZCIsInN1YiI6IjY0ODEzYmVkNjQ3NjU0MDEwNWJmZWUzMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WWPU5zM9ef2R8M7qHLVXRaGjosEzNU0ev3ZwEEN9f2U'
       }
     };
 
+    console.log("TOP RATED MOVIES");
+    for (let i = 0; i < personid.length; i++) {
+      const url = `https://api.themoviedb.org/3/discover/movie?with_people=${personid[i]}&&page=1&&sort_by=vote_average.desc`;
 
+      let response = await fetch(url, options);
+      let responseData = await response.json();
+
+      console.log('TOP RATED MOVIES FOR PERSON ID:', personid[i]);
+      let results = responseData.results;
+
+      console.log(results);
+      if (results && results.length != 0) {
+        topRatedMovies.push(results[0].id);
+      }
+    }
+
+    return topRatedMovies;
+  }
+
+
+  // imporant
+  async function getRecommendation() {
     try {
-      let response = await fetch(`https://api.themoviedb.org/3/movie/${id}/watch/providers`, options);
+      // Display loading UI
+      document.getElementById("loadingcontainer").style.display = "block";
+      document.getElementById("recommendationcontainer").style.display = "none";
 
+      // Initialize local variables
+      let recommendedMoviesList = [];
+      let storedMovies = localStorage.getItem("movies");
+      let moviesIDs = JSON.parse(storedMovies) || []; // Fallback if nothing is stored
 
-      let result = await response.json();
+      // Fetch top rated movies for people (actors/directors)
+      let topMoviesForPeopleIds = await getTopMoviesForPeople();
+      for (let personMovieId of topMoviesForPeopleIds) {
+        let personMovieRecommendations = await getAllReccommendations(personMovieId);
+        recommendedMoviesList = recommendedMoviesList.concat(personMovieRecommendations);
+      }
 
-      let providers_result = result.results;
+      // Fetch recommendations for selected movies
+      for (let movieId of moviesIDs) {
+        let moviesList = await getAllReccommendations(movieId);
+        recommendedMoviesList = recommendedMoviesList.concat(moviesList);
+      }
 
-      let usproviders = providers_result['US']
+      // Assuming you have a function to remove duplicate movies based on their IDs
+      // recommendedMoviesList = removeDuplicateMovies(recommendedMoviesList);
 
-
-
-      console.log("PROVIDERS");
-      console.log(usproviders);
-
-
-      return usproviders;
-
+      // Check if there are any recommended movies
+      if (!recommendedMoviesList.length) {
+        // Update UI to show no recommendations found
+        document.querySelector("body").insertAdjacentHTML('beforeend', `<div class="subtitle"><p class="text-center">No movies found for recommendation.</p></div>`);
+      } else {
+        // Assuming you have a function that sorts and then displays movies on the page
+        recommendedMoviesList = sortMovies(recommendedMoviesList, 'year'); // Sort by year or any other criteria
+        displayMovies(recommendedMoviesList); // Function that handles displaying movies on the page
+      }
     } catch (error) {
-
+      console.error('Failed to get recommendations:', error);
+      // Handle errors, for example, update the UI to indicate an error state
+    } finally {
+      // Hide loading UI regardless of success/failure
+      document.getElementById("loadingcontainer").style.display = "none";
     }
 
 
-    return undefined;
 
-
-  }
-  let watch_providers_mapping = {};
-  async function getRecommendation() {
 
     let cacheItems = searchCache();
-
-
-    // watch_providers = await getWatchProviders();
-
-    /*getWatchProviders().then(data => {
-      watch_providers = data;
-      const ulElement = document.getElementById('watchProviders');
-
-      data.forEach((provider) => {
-          const liElement = document.createElement('li');
-          const aElement = document.createElement('a');
-
-          aElement.classList.add('dropdown-item');
-          aElement.href = "#";
-          aElement.onclick = function() {
-              // Handle the onclick event here
-              console.log(provider.provider_name);
-          };
-          aElement.textContent = provider.provider_name;
-
-          liElement.appendChild(aElement);
-          ulElement.appendChild(liElement);
-      });
-  }).catch(err => console.log(err));*/
-
 
     let movieElements = document.querySelectorAll('[data-movie-id]');
     let movieIds = Array.from(movieElements).map(el => el.getAttribute('data-movie-id'));
@@ -508,10 +399,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         recommendedMoviesList = recommendedMoviesList.concat(moviesList);
 
-        //choose only 2 movies
-        // if (i == 2) {
-        //break;
-        //  }
       }
 
       //Get recommended movies directors
@@ -521,10 +408,6 @@ document.addEventListener('DOMContentLoaded', function () {
         let moviesList = await getAllReccommendations(topMoviesDirectorsTopMovieIds[i])
 
         recommendedMoviesList = recommendedMoviesList.concat(moviesList);
-        //choose only 2 movies
-        // if (i == 2) {
-        // break;
-        //  }
       }
 
 
@@ -538,11 +421,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
       let recentmovies = JSON.parse(localStorage.getItem('recent'));
       let recentness = '';
-
-      // if list contain 2 then movies which are 2 months older get displayed
-      // if list contain 4 then movies which are 2 years older get displayed
-      // if list contain 5 then movies which are older than 2 years get displayed
-      //if list contain 0 then any movie can be displayed
 
       console.log("RECENTNESS")
       console.log(recentmovies)
@@ -639,15 +517,15 @@ document.addEventListener('DOMContentLoaded', function () {
           let provider = alltypes[j];
 
           if (
-          provider.provider_name != "Apple TV" &&
-          provider.provider_name != "Amazon Prime Video" &&
-          provider.provider_name != "Disney Plus" &&
-          provider.provider_name != "Netflix" &&
-          provider.provider_name != "Paramount Plus"
+            provider.provider_name != "Apple TV" &&
+            provider.provider_name != "Amazon Prime Video" &&
+            provider.provider_name != "Disney Plus" &&
+            provider.provider_name != "Netflix" &&
+            provider.provider_name != "Paramount Plus"
 
-        ) {
-          continue;
-        }
+          ) {
+            continue;
+          }
 
           //storing the id
           if (watch_providers_mapping[provider.provider_name] == undefined) {
@@ -670,7 +548,7 @@ document.addEventListener('DOMContentLoaded', function () {
       Object.keys(watch_providers_mapping).forEach((providerName, index) => {
         let provider = watch_providers_mapping[providerName];
 
-            html += `
+        html += `
       <div class="provider-container d-flex align-items-center justify-content-center m-1">
         <div style="cursor:pointer;
                       border: 2px solid #ffffff; // Border color
@@ -748,15 +626,15 @@ document.addEventListener('DOMContentLoaded', function () {
           let provider = alltypes[j];
 
           if (
-          provider.provider_name != "Apple TV" &&
-          provider.provider_name != "Amazon Prime Video" &&
-          provider.provider_name != "Disney Plus" &&
-          provider.provider_name != "Netflix" &&
-          provider.provider_name != "Paramount Plus"
+            provider.provider_name != "Apple TV" &&
+            provider.provider_name != "Amazon Prime Video" &&
+            provider.provider_name != "Disney Plus" &&
+            provider.provider_name != "Netflix" &&
+            provider.provider_name != "Paramount Plus"
 
-        ) {
-          continue;
-        }
+          ) {
+            continue;
+          }
 
           //storing the id
           if (watch_providers_mapping[provider.provider_name] == undefined) {
@@ -828,6 +706,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+
   }
 
 
@@ -839,22 +718,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let node = document.getElementById(id);
     let genreBlock = node.parentNode;
 
-    // Create a div for overlay
-    // Create a div for overlay
-    /*  .provider-card {
-        position: relative;
-    }
-
-    .provider-card::after {
-        content: '';
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed
-    }*/
     let overlay = document.createElement('div');
     overlay.style = `
         position: absolute;
@@ -916,216 +779,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     }
 
-    //page = 1;
-    //totalPage = 1;
-    //movies = [];
-    //trending = false;
-    //loadmovies()
-
     sortDisplay();
     console.log(providerName);
+    displayMovies(recommendedMoviesList);
   }
 
 
-
-
-
-
-  async function getSimilarMovies() {
-
-
-    //url = `https://api.themoviedb.org/3/discover/movie?page=${page}&&vote_count.gte=500&&primary_release_date.lte=${currentYear}&&language=en-US&&sort_by=vote_average.desc`;
-    let givengenresids = JSON.parse(localStorage.getItem("genreid"));
-
-    let genreid = '';
-    if (givengenresids != null) {
-      genreid = givengenresids.join("|")
-    }
-
-    url = `https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&&with_genres=${genreid}`
-
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1N2ZjYmJiZjI3YzQxNTk3MDQxZGZhMTU3YjRlN2Q3ZCIsInN1YiI6IjY0ODEzYmVkNjQ3NjU0MDEwNWJmZWUzMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WWPU5zM9ef2R8M7qHLVXRaGjosEzNU0ev3ZwEEN9f2U'
-      }
-    };
-
-    //url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`;
-
-    let response = await fetch(url, options);
-    let responseData = await response.json();
-
-    console.log('NOW SIMILAR  MOVIES')
-
-    //actor results
-
-    let movieResults = responseData.results;
-
-    return movieResults;
-  }
-
-
-  async function startObserver() {
-
-    let cacheItems = searchCache();
-
-
-
-    let movieElements = document.querySelectorAll('[data-movie-id]');
-    let movieIds = Array.from(movieElements).map(el => el.getAttribute('data-movie-id'));
-
-
-    if (cacheItems.length == 0) {
-      //only if cache items is empty query this
-      document.getElementById("loadingcontainer").style.display = "block";
-      document.getElementById("recommendationcontainer").style.display = "none";
-
-      let moviesIDs = await getMoviesId();
-
-
-
-      //Get movies
-      for (let i = 0; i < moviesIDs.length; i++) {
-
-        let moviesList = await getAllReccommendations(moviesIDs[i])
-
-        recommendedMoviesList = recommendedMoviesList.concat(moviesList);
-      }
-
-
-      document.getElementById("loadingcontainer").style.display = "none";
-      document.getElementById("recommendationcontainer").style.display = "block";
-
-
-
-
-      let givengenresids = JSON.parse(localStorage.getItem("genreid"));
-
-      console.log("SELECTED GENRE's ID");
-
-      console.log(givengenresids)
-
-
-
-
-      if (givengenresids != null) {
-        recommendedMoviesList = recommendedMoviesList.filter(movie => {
-          // Check if any of the movie's genre IDs are in givengenresids
-          return movie.genre_ids.some(id => givengenresids.includes(id));
-        });
-      }
-
-
-      // Convert to Set and back to Array to remove duplicates
-      recommendedMoviesList = Array.from(new Set(recommendedMoviesList.map(movie => movie.id))).map(id => recommendedMoviesList.find(movie => movie.id === id));
-
-
-
-      localStorage.setItem("recommendations", JSON.stringify(recommendedMoviesList));
-    }
-
-    else {
-
-      recommendedMoviesList = cacheItems;
-
-      let givengenresids = JSON.parse(localStorage.getItem("genreid"));
-
-      console.log("SELECTED GENRE's ID");
-
-      console.log(givengenresids)
-
-
-      if (givengenresids != null) {
-        recommendedMoviesList = recommendedMoviesList.filter(movie => {
-          // Check if any of the movie's genre IDs are in givengenresids
-          return movie.genre_ids.some(id => givengenresids.includes(id));
-        });
-      }
-
-    }
-
-    recommendedMoviesList = recommendedMoviesList.filter(movie => {
-      // Only keep movies not present in movieIds
-      return !movieIds.includes(movie.id.toString());
-    });
-
-    console.log("HERE WE GOT THE RECCOMENDATIONS")
-
-    console.log(recommendedMoviesList)
-
-
-    let moviesContainer = document.querySelector("body");
-
-    if (recommendedMoviesList.length == 0) {
-
-      moviesContainer.insertAdjacentHTML('beforeend', `<div class="subtitle">
-        <p class="text-center">No movies selected for reccommendation</p>
-      </div>`);
-
-      return;
-    }
-
-
-
-    //This one is for lazy load
-    /* const sentinel = document.querySelector('#sentinel');
-     const observer = new IntersectionObserver((entries) => {
-       if (entries[0].isIntersecting) {
-         displayMovies();
-         if (currentIndex >= recommendedMoviesList.length) {
-           observer.disconnect();
-         }
-       }
-     });
-
-     observer.observe(sentinel);
-
-     */
-
-  }
-
-
-  async function getWatchProviders() {
-
-    url = `/get-watch-providers`
-
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1N2ZjYmJiZjI3YzQxNTk3MDQxZGZhMTU3YjRlN2Q3ZCIsInN1YiI6IjY0ODEzYmVkNjQ3NjU0MDEwNWJmZWUzMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WWPU5zM9ef2R8M7qHLVXRaGjosEzNU0ev3ZwEEN9f2U'
-      }
-    };
-
-    //url = `https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1`;
-
-    let response = await fetch(url, options);
-    let responseData = await response.json();
-
-    console.log('NOW SIMILAR  MOVIES')
-
-    //actor results
-
-    let watchProviders = responseData.results;
-    console.log(watchProviders);
-
-    return watchProviders;
-
-  }
-
+  // important
   window.retryReccomendation = function () {
     window.location.href = "/";
-
-    /*window.history.pushState(null, "/", window.location.href);
-    window.onpopstate = function () {
-      window.history.go(1);
-    };*/
-
   }
 
-
+  // important
   function sortDisplay() {
 
     let nextMovies = recommendedMoviesList;
@@ -1185,10 +850,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   }
 
-
-
-
-
+  // important
   function displayMovies() {
     if (currentIndex < recommendedMoviesList.length) {
       let nextMovies = recommendedMoviesList.slice(currentIndex, currentIndex + itemsPerPage);
@@ -1248,8 +910,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-
-
+  // console the list1
+  console.log("List 1 Top Movies: " + list1);
 
   //startObserver();
   getRecommendation();
